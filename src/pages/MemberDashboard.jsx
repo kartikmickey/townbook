@@ -13,10 +13,21 @@ import {
 import BookList from "../components/BookList";
 import RoomList from "../components/RoomList";
 import NavBar from "../components/NavBar";
+import { useNavigate, useLocation } from "react-router-dom";
+
+
 
 export default function MemberDashboard() {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+const softRefresh = () => {
+    navigate("/refresh", { replace: true }); // temporary route
+    setTimeout(() => {
+      navigate(location.pathname, { replace: true }); // back to original
+    }, 50);
+  };
 
   const fetchReservations = async () => {
     const user = auth.currentUser;
@@ -52,7 +63,8 @@ export default function MemberDashboard() {
     }
 
     fetchReservations();
-    window.location.reload();
+    // window.location.reload();
+    softRefresh()
   };
 
   const handleReturn = async (id, itemId, type) => {
@@ -72,7 +84,8 @@ export default function MemberDashboard() {
     }
 
     fetchReservations();
-    window.location.reload();
+    // window.location.reload();
+    softRefresh()
   };
 
   useEffect(() => {
